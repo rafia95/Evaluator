@@ -1,0 +1,4 @@
+Collections\Queue.class
+com\mycompany\evaluator\Evaluator.class
+com\mycompany\evaluator\InvalidExpressionException.class
+Collections\Stack.class
