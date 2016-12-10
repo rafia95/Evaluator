@@ -12,14 +12,14 @@
     <!-- Identifies the programmer or programmers who worked on the project -->
     <developers>
         <developer>
-            <id>Enter your school id</id>
-            <name>Enter your name</name>
-            <email>Enter your email address</email>
+            <id>1410926</id>
+            <name>rafia anwar</name>
+            <email>rafia.anwar95@gmail.com</email>
         </developer>
     </developers>
     <!-- The company or organization that the programmer(s) work for -->
     <organization>
-        <name>Enter school name</name>
+        <name>dawson</name>
     </organization>
     <!-- Global settings for the project. Settings can be accessed in the pom
     by placing the tag name in ${...} ex. ${mainClass} -->
