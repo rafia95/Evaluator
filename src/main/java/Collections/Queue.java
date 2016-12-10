@@ -1,16 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Collections;
 
 import java.util.ArrayList;
 
 
 /**
- *
+ * This class behaves like Queue in java.util.
+ * It has push,peek and pop methods implemented in it.
+ * 
  * @author Rafia
+ * @version 30/11/2016
  */
 public class Queue<T> {
     private ArrayList<T> t;
@@ -27,22 +26,15 @@ public class Queue<T> {
       
         return t.size();
     }
-  /*   public Queue(int size) {
-        t = new ArrayList<T>(size);
-        startPointer = -1;  
-        endPointer = -1;
-        this.size=size;
-    }
-*/
-    //push
+ 
     // adds element to the end and increments the end pointer
     public boolean push(T s){
         boolean pushed = false;
         if (isEmpty())
         {
             t.add(s);
-            startPointer++; // = 0
-            endPointer = startPointer + 1;   // =0
+            startPointer++; 
+            endPointer = startPointer + 1;  
             pushed = true;
 
         }
@@ -55,22 +47,14 @@ public class Queue<T> {
         return pushed;
     }
        
-    //isfull
-  /*  private boolean isFull(){
-        if(stackPointer >= size)
-            return true;
-        return false;
-    }
-  */  
-    //pop
+    
     //returns the first value in queue 
     public T pop(){
         
          if(!isEmpty())
         {
             T element = t.get(startPointer); //stackPointer keeps check of present location of element
-            //delete the element from stack 
-            //t.remove(0);
+          
             startPointer++; //increments the start pointer so that next element popped will from next position
             return element;
         }

@@ -1,13 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.evaluator;
 
 /**
- *
- * @author 1410926
+ * This is a custom exception class.
+ * It is being used when invalid expression is provided
+ * to a class.
+ * 
+ * @author Rafia
+ * @version 08/12/2016
  */
 public class InvalidExpressionException extends Exception{
     	private static final long  serialVersionUID = 4205171L;

@@ -1,46 +1,53 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.evaluator;
 
 import Collections.Queue;
 import Collections.Stack;
 
 /**
- * This class should handle the basic functionality such as getting infix
+ * This class handles the basic functionality such as getting infix
  * expression and turning it to postfix using stacks and queues and then
  * evaluating it.
  *
  * @author Rafia
+ * @version 09/12/2016
  */
 public class Evaluator {
-    private Stack<String> operatorStack;
-    private Queue<String> numberQueue;
-    private Queue<String> holdingQueue;
-    private Queue<String> resultQueue;
+    private Stack<String> operatorStack; //stack for keeping operators
+    private Queue<String> numberQueue; // queue where operands and opertors are inserted
+    private Queue<String> holdingQueue; //initial queue with all the elements
+    private Queue<String> resultQueue; // holds the calculated results
+    private String isNumber ; //regex to check for numbers
+    private String isOperator; //regex to check for operands
     /**
      * Default constructor 
      */
-    public Evaluator(){}
-    public Queue<String> setHoldingQueue(Queue<String> holdingQueue) throws InvalidExpressionException{
-        this.holdingQueue = holdingQueue;
+    public Evaluator(){
         this.operatorStack = new Stack<>();
         this.numberQueue = new Queue<>();
+        isNumber = "^[-+]?[0-9]*\\.?[0-9]+$";
+        isOperator = "[*+-/]";}
+    
+    /**
+     * This method is used to set the value of holding queue.
+     * It checks if the incoming queue is valid, if not then throws exception.
+     * @param holdingQueue  contains the incoming expression
+     * @return result queue
+     * @throws InvalidExpressionException  when expression is not properly formatted
+     */
+    public Queue<String> setHoldingQueue(Queue<String> holdingQueue) throws InvalidExpressionException{
+        this.holdingQueue = holdingQueue;
+        
         checkValidity();
         return resultQueue;
     }
     
-    public Evaluator(Queue<String> holdingQueue) throws InvalidExpressionException
-    {
-        this.holdingQueue = holdingQueue;
-        Stack<String> operatorStack = new Stack<>();
-        Queue<String> numberQueue = new Queue<>();
-        checkValidity();
-    }
-  
-    public void checkValidity() throws InvalidExpressionException {
+  /**
+   * Checks for valid expression, if it is valid, then invokes the method to convert 
+   * expression to post fix
+   * @throws InvalidExpressionException when expression is not properly formatted
+   */
+    private void checkValidity() throws InvalidExpressionException {
 
         //checks if the equation data is valid
         boolean valid = validate(holdingQueue);
@@ -52,15 +59,18 @@ public class Evaluator {
 
     }
 
+    /**
+     * This method converts the infix expression into postfix by processing each element
+     * in infix expression and it also checks for the invalid data on the go.
+     * @throws InvalidExpressionException when expression is not properly formatted
+     */
     public  void convertInfixToPostfix() throws InvalidExpressionException {
-        String isNumber = "^[-+]?[0-9]*\\.?[0-9]+$";
-        String isOperator = "[*+-/]";
+       
         int parenthesisCtr = 0;
         //while loop until the queue holding all the values are processed
         while (!(holdingQueue.isEmpty())) {
             //if the queue has a number, then the number if pushed to the number Queue
             if (holdingQueue.peek().matches(isNumber)) {
-                System.out.println("peeked num " +holdingQueue.peek() );
                 processNumber();
                 //if the next element is an operator
             } else if (holdingQueue.peek().matches(isOperator)) {
@@ -68,33 +78,32 @@ public class Evaluator {
             } else if (holdingQueue.peek().equals("(")) {
                  processOpeningBracket(operatorStack, holdingQueue, parenthesisCtr);
                         parenthesisCtr++;
-                System.out.println("ctr op " + parenthesisCtr);
             } //keep popping the elmeents to the numberQueue until hit (
             else if (holdingQueue.peek().equals(")")) {
                  processClosingBracket(holdingQueue, operatorStack, parenthesisCtr, numberQueue);
                         parenthesisCtr++;
-
-                System.out.println("ctr " +parenthesisCtr );
             } else {
                 throw new InvalidExpressionException("The equation contains something other than number,op and parentheses : " + holdingQueue);
             }
         }
-        
         while (!operatorStack.isEmpty()) {
-            System.out.println("whileee");
             numberQueue.push(operatorStack.pop());
         }
+        // checks for even number of parenthesis
         if (parenthesisCtr % 2 != 0) {
             throw new InvalidExpressionException("The equation does not have equal number of parentheses: " + parenthesisCtr);
         }
-        System.out.println("stack string rep : " + operatorStack.toString());
-        System.out.println("queue string rep : " + numberQueue.toString());
         evaluatePostFixProvidedExpression(numberQueue);
     }
 
-    //make it unstatic
+    /**
+     * this method is used to compare the operator in holding queue
+     * with the operator in stack 
+     * @param inStackValue  the operator already present in stack
+     * @param holdingQueueValue  the operator in queue
+     * @return true if queue value is greater
+     */
     private  boolean isIncomingValueGreater(String inStackValue, String holdingQueueValue) {
-        System.out.println("instack val------" + inStackValue + "------- " + holdingQueueValue);
         boolean isGreater;
         int valueToInsert = switchForOperators(holdingQueueValue);
         int valueInStack = switchForOperators(inStackValue);
@@ -108,6 +117,11 @@ public class Evaluator {
 
     }
 
+    /**
+     * this method provides an int value according operator precedence order
+     * @param valToCompare  the operator
+     * @return  int according to incoming value
+     */
     private  int switchForOperators(String valToCompare) {
         int val = -1;
         switch (valToCompare) {
@@ -127,36 +141,33 @@ public class Evaluator {
         return val;
     }
 
-    private  void compareSigns(String peekedValInStack, String peekedValInHoldingQueue, Queue<String> holdingQueue, Stack<String> operatorStack, Queue<String> numberQueue) {
-        System.out.println("in compare signs");
-        System.out.println("stack op " + peekedValInStack + "   op in queue "+ peekedValInHoldingQueue );
-        
+    /**
+     * this method compare operators and if queue operator is smaller, it
+     * pops the stack operators and pushes them to new queue i.e. number queue.
+     * if queue operator is greater, then the operator is simply placed in stack
+     * @param peekedValInStack  operator value in stack
+     * @param peekedValInHoldingQueue   operator in initial queue
+     * @param numberQueue  operator in new queue
+     */
+    private  void compareOperators(String peekedValInStack, String peekedValInHoldingQueue,  Queue<String> numberQueue) {
         boolean isGreater = isIncomingValueGreater(peekedValInStack, peekedValInHoldingQueue); //if true, holding queue has greater value
-        System.out.println("is queue greater than stack " + isGreater);
         String queueVal = "";
         //if value is bigger then put on stack
         //if equal or less, then put on queue with numbers
         if (isGreater) {
             queueVal = holdingQueue.pop();
             operatorStack.push(queueVal);
-
         }
         //if queue value is smaller/equal than stack value ,
         // then send the bigger values to the queue holding new numbers
         else {
             queueVal = holdingQueue.pop();
-            System.out.println("operator from queue " + queueVal);
-
-            String number = holdingQueue.peek();
-            System.out.println("number " + number);
-            
-                //take out bigger op, and put it in queue
+            String number = holdingQueue.peek();            
+            //take out bigger op, and put it in queue
             String greaterOperator = operatorStack.pop();
-            System.out.println("number2 " + greaterOperator);
             numberQueue.push(greaterOperator);
             //keep checking
              while (!operatorStack.isEmpty() && operatorStack.peek()!=null && !operatorStack.peek().equals("(") && !isIncomingValueGreater(operatorStack.peek(), queueVal)) {
-                    System.out.println("operatorStack.peek() " + operatorStack.peek());
                     String stackOp = operatorStack.pop();
                     numberQueue.push(stackOp);
                 }
@@ -165,16 +176,17 @@ public class Evaluator {
                  holdingQueue.pop();
                  numberQueue.push(number);
             }
-            System.out.println("stack "+operatorStack);
-           
         }
     }
 
+    /**
+     * 
+     * @param infixQueue
+     * @return 
+     */
     public  Queue<String> evaluatePostFixProvidedExpression(Queue<String> infixQueue) {
         Stack<String> numberStack = new Stack<>();
 
-        String isNumber = "^[-+]?[0-9]*\\.?[0-9]+$";
-        String isOperator = "[*+-/]";
         while (!(infixQueue.isEmpty())) {
             if (infixQueue.peek().matches(isNumber)) {
                 System.out.println("number stack " + numberStack);
@@ -256,7 +268,7 @@ public class Evaluator {
             System.out.println("the operator in stack " + peekedValInStack);
             if (!peekedValInStack.equals("(")) {
                 System.out.println("not a ( so sending to compareSigns");
-                compareSigns(peekedValInStack, peekedValInHoldingQueue, holdingQueue, operatorStack, numberQueue);
+                compareOperators(peekedValInStack, peekedValInHoldingQueue,numberQueue);
             }
             else{
             operatorStack.push(holdingQueue.pop());

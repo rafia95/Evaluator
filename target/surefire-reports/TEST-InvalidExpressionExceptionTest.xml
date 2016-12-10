@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="EvaluatorTest" time="0.314" tests="25" errors="0" skipped="0" failures="0">
+<testsuite name="InvalidExpressionExceptionTest" time="0" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_25\jre\bin"/>
@@ -60,29 +60,9 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase name="testEvaluator[0]" classname="EvaluatorTest" time="0.015"/>
-  <testcase name="testEvaluator[1]" classname="EvaluatorTest" time="0.031"/>
-  <testcase name="testEvaluator[2]" classname="EvaluatorTest" time="0.016"/>
-  <testcase name="testEvaluator[3]" classname="EvaluatorTest" time="0.016"/>
-  <testcase name="testEvaluator[4]" classname="EvaluatorTest" time="0.015"/>
-  <testcase name="testEvaluator[5]" classname="EvaluatorTest" time="0.016"/>
-  <testcase name="testEvaluator[6]" classname="EvaluatorTest" time="0.047"/>
-  <testcase name="testEvaluator[7]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[8]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[9]" classname="EvaluatorTest" time="0.015"/>
-  <testcase name="testEvaluator[10]" classname="EvaluatorTest" time="0.016"/>
-  <testcase name="testEvaluator[11]" classname="EvaluatorTest" time="0.016"/>
-  <testcase name="testEvaluator[12]" classname="EvaluatorTest" time="0.015"/>
-  <testcase name="testEvaluator[13]" classname="EvaluatorTest" time="0.016"/>
-  <testcase name="testEvaluator[14]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[15]" classname="EvaluatorTest" time="0.016"/>
-  <testcase name="testEvaluator[16]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[17]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[18]" classname="EvaluatorTest" time="0.015"/>
-  <testcase name="testEvaluator[19]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[20]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[21]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[22]" classname="EvaluatorTest" time="0.031"/>
-  <testcase name="testEvaluator[23]" classname="EvaluatorTest" time="0"/>
-  <testcase name="testEvaluator[24]" classname="EvaluatorTest" time="0.018"/>
+  <testcase name="testEvaluator[0]" classname="InvalidExpressionExceptionTest" time="0"/>
+  <testcase name="testEvaluator[1]" classname="InvalidExpressionExceptionTest" time="0"/>
+  <testcase name="testEvaluator[2]" classname="InvalidExpressionExceptionTest" time="0"/>
+  <testcase name="testEvaluator[3]" classname="InvalidExpressionExceptionTest" time="0"/>
+  <testcase name="testEvaluator[4]" classname="InvalidExpressionExceptionTest" time="0"/>
 </testsuite>

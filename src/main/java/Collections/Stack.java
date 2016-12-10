@@ -1,15 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Collections;
 
 import java.util.ArrayList;
 
 /**
- * Generic class
+ * This class behaves like Stack in java.util.
+ * It has push,peek and pop methods implemented in it.
+ * 
  * @author Rafia
+ * @version 30/11/2016
  */
 public class Stack<T> {
     private ArrayList<T> t;
@@ -60,11 +59,7 @@ public class Stack<T> {
          else
              return null;
     }
-//    private boolean isFull(){
-//        if(stackPointer >= size)
-//            return true;
-//        return false;
-//    }
+
 
     @Override
     public String toString() {
