@@ -50,7 +50,7 @@ public class Evaluator {
     private void checkValidity() throws InvalidExpressionException {
 
         //checks if the equation data is valid
-        boolean valid = validate(holdingQueue);
+        boolean valid = validate();
         if (valid) {
             convertInfixToPostfix();
         } else {
@@ -74,13 +74,13 @@ public class Evaluator {
                 processNumber();
                 //if the next element is an operator
             } else if (holdingQueue.peek().matches(isOperator)) {
-                processOperator(holdingQueue, operatorStack, numberQueue);
+                processOperator();
             } else if (holdingQueue.peek().equals("(")) {
-                 processOpeningBracket(operatorStack, holdingQueue, parenthesisCtr);
+                 processOpeningBracket();
                         parenthesisCtr++;
             } //keep popping the elmeents to the numberQueue until hit (
             else if (holdingQueue.peek().equals(")")) {
-                 processClosingBracket(holdingQueue, operatorStack, parenthesisCtr, numberQueue);
+                 processClosingBracket();
                         parenthesisCtr++;
             } else {
                 throw new InvalidExpressionException("The equation contains something other than number,op and parentheses : " + holdingQueue);
@@ -180,8 +180,8 @@ public class Evaluator {
     }
 
     /**
-     * 
-     * @param infixQueue
+     * It evaluates the infix expression.
+     * @param infixQueue the queue holding infix expression
      * @return 
      */
     public  Queue<String> evaluatePostFixProvidedExpression(Queue<String> infixQueue) {
@@ -189,15 +189,11 @@ public class Evaluator {
 
         while (!(infixQueue.isEmpty())) {
             if (infixQueue.peek().matches(isNumber)) {
-                System.out.println("number stack " + numberStack);
                 numberStack.push(infixQueue.pop());
-
             } else if (infixQueue.peek().matches(isOperator)) {
                 String secondNum = numberStack.pop();
                 String firstNum = numberStack.pop();
-                System.out.println("secondNum  " + secondNum);
-                System.out.println("fisrt num " + firstNum);
-
+               
                 double i2 = Double.parseDouble(secondNum);
                 double i1 = Double.parseDouble(firstNum);
 
@@ -213,7 +209,6 @@ public class Evaluator {
                     result = i1 / i2;
                 }
                 result = Math.round(result * 100.0) / 100.0;
-                System.out.println("resuult " + result);
                 numberStack.push(result + "");
             }
         }
@@ -222,8 +217,13 @@ public class Evaluator {
         return resultQueue;
     }
 
-    private  boolean validate(Queue<String> holdingQueue) {
-        String isNumber = "^[-+]?[0-9]*\\.?[0-9]+$";
+    /**
+     * Validates the incoming queue to have odd length,
+     * size more than 3 at least and first element should be 
+     * a number or ( .
+     * @return 
+     */
+    private  boolean validate() {
 
         //the equation should always be odd in size
         if (holdingQueue.getSize() % 2 == 0) {
@@ -239,10 +239,13 @@ public class Evaluator {
         return true;
     }
 
+    /**
+     * Processes the number in holdingQueue, pushes it to numberQueue,
+     * and makes sure next element is not a number or ( . 
+     * 
+     * @throws InvalidExpressionException when expression is not properly formatted
+     */
     private  void processNumber() throws InvalidExpressionException {
-        System.out.println("IN PROCESS NUBER");
-        String isOperator = "[*+-/]";
-        System.out.println("----------" +holdingQueue.peek() );
         numberQueue.push(holdingQueue.pop());
         //make sure next element has to be operator or parentheseis,otherwise throw exception
         if (!(holdingQueue.isEmpty())) {
@@ -252,12 +255,13 @@ public class Evaluator {
         }
     }
 
-    private  void processOperator(Queue<String> holdingQueue, Stack<String> operatorStack, Queue<String> numberQueue) throws InvalidExpressionException {
-        String isNumber = "^[-+]?[0-9]*\\.?[0-9]+$";
-                String isOperator = "[*+-/]";
-
+     /**
+     * Processes the operator in holdingQueue, pushes it to operatorStack
+     * 
+     * @throws InvalidExpressionException when expression is not properly formatted
+     */
+    private  void processOperator() throws InvalidExpressionException {
         String peekedValInHoldingQueue = holdingQueue.peek();
-        System.out.println("should be operatr " +peekedValInHoldingQueue );
         String peekedValInStack = "";
         //if stack is empty , no need to check 
         if (operatorStack.isEmpty()) {
@@ -265,17 +269,13 @@ public class Evaluator {
         } //stack isnt empty, compare values
         else {
             peekedValInStack = operatorStack.peek();
-            System.out.println("the operator in stack " + peekedValInStack);
             if (!peekedValInStack.equals("(")) {
-                System.out.println("not a ( so sending to compareSigns");
                 compareOperators(peekedValInStack, peekedValInHoldingQueue,numberQueue);
             }
             else{
             operatorStack.push(holdingQueue.pop());
             }
         }
-        System.out.println("queue in process op " + numberQueue);
-        System.out.println("holding queue  " + holdingQueue);
         if (!(holdingQueue.isEmpty())) {
             if(! holdingQueue.peek().matches(isOperator))
             {
@@ -286,8 +286,12 @@ public class Evaluator {
         }
     }
 
-    private  void  processOpeningBracket(Stack<String> operatorStack, Queue<String> holdingQueue, int parenthesisCtr) throws InvalidExpressionException {
-        String isNumber = "^[-+]?[0-9]*\\.?[0-9]+$";
+    /**
+     * processes the opening bracket in the infix expression. 
+     * it makes sure next element is not a number or (. 
+     * @throws InvalidExpressionException when expression is not properly formatted
+     */
+    private  void  processOpeningBracket() throws InvalidExpressionException {
         operatorStack.push(holdingQueue.pop());
         //only number can be present after ( or another (
         if (!(holdingQueue.isEmpty())) {
@@ -296,16 +300,17 @@ public class Evaluator {
             }
         }
     }
-
-    private  void processClosingBracket(Queue<String> holdingQueue, Stack<String> operatorStack, int parenthesisCtr, Queue<String> numberQueue) throws InvalidExpressionException {
+    /**
+     * processes the closing bracket in the infix expression. 
+     * it makes sure next element is not a operator or ) . 
+     * @throws InvalidExpressionException when expression is not properly formatted
+     */
+    private  void processClosingBracket() throws InvalidExpressionException {
                 
-                String isOperator = "[*+-/]";
-System.out.println("queue " + numberQueue);
         String op = holdingQueue.pop(); //should pop )
         //check until the opening parenthesis
         while (!operatorStack.peek().equals("(")) {
             String v = operatorStack.pop();
-                        System.out.println("while its ( " + v);
             numberQueue.push(v);
         }
         String var = operatorStack.pop();
